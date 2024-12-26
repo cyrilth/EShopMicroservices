@@ -9,6 +9,7 @@
     <DockerServiceName>catalog.api</DockerServiceName>
     <DockerComposeProjectName>eshop-microservices</DockerComposeProjectName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local|AnyCPU'" />
   <ItemGroup>
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
