@@ -1,6 +1,7 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using static Discount.Grpc.DiscountProtoService;
+using Discount.Grpc;
+using BuildingBlocks.Messaging.MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +38,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 //Grpc Services
-builder.Services.AddGrpcClient<DiscountProtoServiceClient>(options =>
-{     
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+{
     options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
 }).ConfigurePrimaryHttpMessageHandler(() =>
 {
@@ -49,6 +50,10 @@ builder.Services.AddGrpcClient<DiscountProtoServiceClient>(options =>
 
     return handler;
 });
+
+//Async Communication Services
+builder.Services.AddMessageBroker(builder.Configuration);
+
 
 //Cross-Cutting Services
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
@@ -63,9 +68,9 @@ var app = builder.Build();
 
 app.MapCarter();
 app.UseExceptionHandler(options => { });
-app.UseHealthChecks("/health", 
-    new HealthCheckOptions 
-    { 
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
 
