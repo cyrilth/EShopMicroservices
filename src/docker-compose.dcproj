@@ -8,6 +8,7 @@
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>catalog.api</DockerServiceName>
     <DockerComposeProjectName>eshop-microservices</DockerComposeProjectName>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local|AnyCPU'" />
   <ItemGroup>
